@@ -9,6 +9,8 @@
 #include <tchar.h>
 #include <strsafe.h>
 
+#include <ctime>
+
 #include "MyService.hpp" // only because of service name
 
 
@@ -55,8 +57,8 @@ void ReportSvcEvent( DWORD dwEventID, LPCTSTR szFormat, ... )
 
 	if (hEventSource != NULL)
 	{
-		TCHAR buffer [80];
-		_vsntprintf( buffer, 79, szFormat, argList );
+		TCHAR buffer [128];
+		_vsntprintf( buffer, 127, szFormat, argList );
 
 		LPCTSTR lpszStrings [2] = { MY_SERVICE_NAME, buffer };
 
@@ -77,8 +79,15 @@ void ReportSvcEvent( DWORD dwEventID, LPCTSTR szFormat, ... )
 
 #else
 
-	_vtprintf( szFormat, argList );
-	_tprintf( _T("\n") );
+	TCHAR timeStr [20];
+	time_t now = time(nullptr);
+	wcsftime( timeStr, 20, _T("%Y-%m-%d %H:%M:%S"), localtime(&now) );
+
+	TCHAR finalFormat [128];
+	_sntprintf( finalFormat, 127, _T("%s [Event ID: %04u] %s\n"), timeStr, dwEventID, szFormat );
+
+	_vtprintf( finalFormat, argList );
+	fflush( stdout );
 
 #endif
 
