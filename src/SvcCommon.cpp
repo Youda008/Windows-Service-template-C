@@ -12,6 +12,7 @@
 #include <ctime>
 
 #include "MyService.hpp" // only because of service name
+#include "EventLogMessages.h"
 
 
 SERVICE_STATUS_HANDLE g_svcStatusHandle;
@@ -46,6 +47,24 @@ void ReportSvcStatus( DWORD dwCurrentState, DWORD dwWin32ExitCode, DWORD dwWaitH
 #endif
 }
 
+static WORD GetTypeFromEventID( DWORD dwEventID )
+{
+	DWORD dwEventSeverity = (dwEventID & 0xC0000000) >> 30;
+	switch (dwEventSeverity)
+	{
+		case STATUS_SEVERITY_SUCCESS:
+			return EVENTLOG_SUCCESS;
+		case STATUS_SEVERITY_INFORMATIONAL:
+			return EVENTLOG_INFORMATION_TYPE;
+		case STATUS_SEVERITY_WARNING:
+			return EVENTLOG_WARNING_TYPE;
+		case STATUS_SEVERITY_ERROR:
+			return EVENTLOG_ERROR_TYPE;
+		default:
+			return EVENTLOG_WARNING_TYPE;
+	}
+}
+
 void ReportSvcEvent( DWORD dwEventID, LPCTSTR szFormat, ... )
 {
 	va_list argList;
@@ -57,6 +76,9 @@ void ReportSvcEvent( DWORD dwEventID, LPCTSTR szFormat, ... )
 
 	if (hEventSource != NULL)
 	{
+		WORD wType = GetTypeFromEventID( dwEventID );
+		WORD wCategory = 0;  // TODO
+
 		TCHAR buffer [128];
 		_vsntprintf( buffer, 127, szFormat, argList );
 
@@ -64,8 +86,8 @@ void ReportSvcEvent( DWORD dwEventID, LPCTSTR szFormat, ... )
 
 		ReportEvent(
 			hEventSource,        // event log handle
-			EVENTLOG_ERROR_TYPE, // event type
-			0,                   // event category
+			wType,               // event type
+			wCategory,           // event category
 			dwEventID,           // event identifier
 			NULL,                // no security identifier
 			2,                   // size of lpszStrings array
