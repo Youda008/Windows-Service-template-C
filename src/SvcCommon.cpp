@@ -7,6 +7,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
+#define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
 #include <ctime>
@@ -54,7 +55,7 @@ static WORD GetTypeFromEventID( DWORD dwEventID )
 	{
 		case STATUS_SEVERITY_SUCCESS:
 			return EVENTLOG_SUCCESS;
-		case STATUS_SEVERITY_INFORMATIONAL:
+		case STATUS_SEVERITY_INFO:
 			return EVENTLOG_INFORMATION_TYPE;
 		case STATUS_SEVERITY_WARNING:
 			return EVENTLOG_WARNING_TYPE;

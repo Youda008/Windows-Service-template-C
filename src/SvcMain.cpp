@@ -85,7 +85,7 @@ int __cdecl _tmain( int argc, TCHAR * argv [] )
 #ifndef DEBUGGING_PROCESS
 	SERVICE_TABLE_ENTRY DispatchTable[] =
 	{
-		{ (WCHAR*)MY_SERVICE_NAME, (LPSERVICE_MAIN_FUNCTION)SvcMain },
+		{ (TCHAR*)MY_SERVICE_NAME, (LPSERVICE_MAIN_FUNCTION)SvcMain },
 		{ NULL, NULL }
 	};
 
