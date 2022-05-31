@@ -6,8 +6,6 @@
 #include <windows.h>
 #include <tchar.h>
 
-#pragma comment(lib, "advapi32.lib")
-
 #include <cstdio>
 #include <signal.h>
 
