@@ -3,10 +3,10 @@ Download this template that uses only Win32 API and get started in no time.
 
 ## How to build
 
-1. Build the message DLL using the `messages/CompileMessages.bat`.
+1. Build the message DLL using the `messages/CompileMessages.bat`.\
    You need Visual Studio Developer Tools for that, but not the IDE. Run this bat in Visual Studio Developer Command Prompt.
-2. Build the service executable from the source files in `src` using your favourite build system and IDE
-   Simpliest example would be `g++ -o MyNewService.exe src/*`
+2. Build the service executable from the source files in `src` using your favourite build system and IDE.\
+   Simpliest example would be `g++ -o MyNewService.exe src/*`\
    When the build fails on unresolved references, google the reference names add the appropriate libraries.
    
 If your service doesn't start or doesn't work and you don't know why, build your code with preprocessor definition `DEBUGGING_PROCESS`
